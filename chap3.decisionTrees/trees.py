@@ -19,7 +19,7 @@ def createDataSet():
                [1, 0, 'no'],
                [0, 1, 'no'],
                [0, 1, 'no']]
-    labels = ['no sufacing', 'flippers']
+    labels = ['no surfacing', 'flippers']
     return dataSet, labels
 
 def splitDataSet(dataSet, axis, value):
@@ -73,4 +73,15 @@ def createTree(dataSet, features):
         subFeat = features[:]
         myTree[bestFeatName][value] = createTree(splitDataSet(dataSet, bestFeat, value), subFeat)
     return myTree
+
+def classify(inputTree, featNames, testVec):
+    firstStr   = inputTree.keys()[0]
+    secondDict = inputTree[firstStr]
+    featIndex  = featNames.index(firstStr)
+    for key in secondDict.keys():
+        if testVec[featIndex] == key:
+            if type(secondDict[key]).__name__ == 'dict':
+                classLabel = classify(secondDict[key], featNames, testVec)
+            else: classLabel = secondDict[key]
+    return classLabel
 
